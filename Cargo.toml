@@ -3,6 +3,8 @@ name = "cetkaik_random_play"
 version = "0.1.0"
 authors = ["sozysozbot <sozysozbot@gmail.com>"]
 edition = "2018"
+icense = "MIT"
+description = "Randomly plays the game. See https://sites.google.com/view/cet2kaik/the-standardized-rule-in-english for more context."
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
