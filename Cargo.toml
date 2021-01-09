@@ -1,13 +1,13 @@
 [package]
 name = "cetkaik_random_play"
-version = "0.1.2"
+version = "0.1.3"
 authors = ["sozysozbot <sozysozbot@gmail.com>"]
 edition = "2018"
 license = "MIT"
-description = "Randomly plays the game. See https://sites.google.com/view/cet2kaik/the-standardized-rule-in-english for more context."
+description = "Randomly plays the game of cetkaik. See https://sites.google.com/view/cet2kaik/the-standardized-rule-in-english for more context."
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-cetkaik_full_state_transition = "0.2.2"
+cetkaik_full_state_transition = "0.2.5"
 rand = "0.8.1"
