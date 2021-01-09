@@ -1,6 +1,6 @@
 [package]
 name = "cetkaik_random_play"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["sozysozbot <sozysozbot@gmail.com>"]
 edition = "2018"
 license = "MIT"
@@ -9,5 +9,5 @@ description = "Randomly plays the game. See https://sites.google.com/view/cet2ka
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-cetkaik_full_state_transition = "0.2.1"
+cetkaik_full_state_transition = "0.2.2"
 rand = "0.8.1"
