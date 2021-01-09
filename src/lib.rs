@@ -8,6 +8,28 @@ mod tests {
 
 use cetkaik_full_state_transition::*;
 
+fn deincentivize_tam_move(candidates: &[message::PureMove]) -> message::PureMove {
+    use rand::seq::SliceRandom;
+    use rand::Rng;
+    let mut rng = rand::thread_rng();
+    loop {
+        let cand = candidates.choose(&mut rng).unwrap();
+
+        if (rng.gen::<f64>() < 0.05_f64)
+            == matches!(cand,
+                message::PureMove::NormalMove(
+                message::NormalMove::TamMoveNoStep{..}
+            ) | message::PureMove::NormalMove(
+                message::NormalMove::TamMoveStepsDuringFormer{..}
+            ) | message::PureMove::NormalMove(
+                message::NormalMove::TamMoveStepsDuringLatter{..}
+            ))
+        {
+            return cand.to_owned();
+        }
+    }
+}
+
 #[must_use]
 pub fn yield_random_next(current_state: &state::A, config: Config) -> Option<state::A> {
     use rand::seq::SliceRandom;
@@ -16,15 +38,15 @@ pub fn yield_random_next(current_state: &state::A, config: Config) -> Option<sta
     let (hop1zuo1_candidates, candidates) = current_state.get_candidates(config);
     let candidate = match (&hop1zuo1_candidates[..], &candidates[..]) {
         ([], []) => return None, // stuck; yield no more
-        ([], candidates) => candidates.choose(&mut rng).unwrap(),
-        (hop1zuo1_candidates, []) => hop1zuo1_candidates.choose(&mut rng).unwrap(),
+        ([], candidates) => deincentivize_tam_move(&candidates),
+        (hop1zuo1_candidates, []) => hop1zuo1_candidates.choose(&mut rng).unwrap().to_owned(),
         (hop1zuo1_candidates, candidates) => {
-            if rng.gen::<f64>() < 0.1_f64 {
+            if rng.gen::<f64>() < 0.01_f64 {
                 // choose randomly from hop1zuo1_candidates
-                hop1zuo1_candidates.choose(&mut rng).unwrap()
+                hop1zuo1_candidates.choose(&mut rng).unwrap().to_owned()
             } else {
                 // choose randomly from candidates
-                candidates.choose(&mut rng).unwrap()
+                deincentivize_tam_move(&candidates)
             }
         }
     }
@@ -39,7 +61,9 @@ pub fn yield_random_next(current_state: &state::A, config: Config) -> Option<sta
 
             let c_candidates = c.get_candidates(config);
 
-            let c_msg = *c_candidates.choose(&mut rng).expect("This cannot fail, because it is always legal to cancel");
+            let c_msg = *c_candidates
+                .choose(&mut rng)
+                .expect("This cannot fail, because it is always legal to cancel");
 
             let (hand_not_resolved, maybe_ciurl) = apply_after_half_acceptance(&c, c_msg, config)
                 .map_err(|e| format!("Internal error in yield_random_next: {}", e))
