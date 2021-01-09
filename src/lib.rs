@@ -30,8 +30,6 @@ pub fn yield_random_next(current_state: &state::A, config: Config) -> Option<sta
     }
     .to_owned();
 
-    let config = Config::cerke_online_alpha();
-
     let hand_not_resolved = match candidate {
         message::PureMove::InfAfterStep(msg) => {
             let (c, maybe_ciurl) = apply_inf_after_step(&current_state, msg, config)
